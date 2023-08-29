@@ -1,0 +1,42 @@
+on:
+  workflow_call:
+    inputs:
+      dotnet_project:
+        description: 'A reference to the dotnet projects to restore, build & test.'
+        required: true
+        type: string
+        default: '**/*.sln'
+
+      dotnet_version:
+        description: 'The dotnet version to use for the whole prcess.'
+        required: true
+        type: string
+        default: 6.0.x
+    
+      build_configuration:
+        description: 'The configuration to build and test the project/solution.'
+        required: true
+        type: string
+        default: Release
+    
+      run_restore:
+        required: true
+        type: boolean
+        default: true
+
+      run_tests:
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/dotnet-restore-build-test
+      with:
+        dotnet_project: ${{ inputs.dotnet_project }}
+        dotnet_version: ${{ inputs.dotnet_version }}
+        build_configuration: ${{ inputs.build_configuration }}
+        run_restore: ${{ inputs.run_restore }}
+        run_tests: ${{ inputs.run_tests }}
