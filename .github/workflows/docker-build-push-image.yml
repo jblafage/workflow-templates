@@ -1,0 +1,79 @@
+on:
+  workflow_call:
+    inputs:
+      registry_server:
+        description: ''
+        required: true
+        type: string
+        default: 'https://index.docker.io/v1/'
+
+      registry_username:
+        description: ''
+        required: true
+        type: string
+
+      dockerfile:
+        description: ''
+        required: true
+        type: string
+        default: Dockerfile
+
+      build_arguments:
+        description: ''
+        type: string
+        default: ''
+
+      build_context:
+        description: ''
+        type: string
+        default: .
+
+      image_repository:
+        description: ''
+        required: true
+        type: string
+
+    secrets:
+      registry_password:
+        required: true
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        # list of Docker images to use as base name for tags
+        images: ${{ inputs.image_repository }}
+
+        # generate Docker tags based on the following events/attributes
+        tags: |
+          type=raw,value=latest-unstable,enable=!{{is_default_branch}}
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+        
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login to the Registry
+      if: github.event_name != 'pull_request'
+      uses: azure/docker@v1
+      with:
+        login-server: ${{ inputs.registry_server }}
+        username: ${{ inputs.registry_username }}
+        password: ${{ secrets.registry_password }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        file: ${{ inputs.dockerfile }}
+        context: ${{ inputs.build_context }}
+        build-args: ${{ inputs.build_context }}
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
