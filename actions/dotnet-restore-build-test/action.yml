@@ -1,0 +1,52 @@
+name: dotnet-restore-build-test
+description: 'Restore, build then test a dotnet project/solution.'
+
+inputs:
+  dotnet_project:
+    description: 'A reference to the dotnet projects to restore, build & test.'
+    required: true
+    type: string
+    default: '**/*.sln'
+
+  dotnet_version:
+    description: 'The dotnet version to use for the whole prcess.'
+    required: true
+    type: string
+    default: 6.0.x
+
+  build_configuration:
+    description: 'The configuration to build and test the project/solution.'
+    required: true
+    type: string
+    default: Release
+
+  run_restore:
+    required: true
+    type: boolean
+    default: true
+
+  run_tests:
+    required: true
+    type: boolean
+    default: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ inputs.dotnet_version }}
+
+    - name: Restore the dotnet project
+      if: ${{ inputs.run_restore }}
+      run: dotnet restore "${{ inuputs.dotnet_project }}"
+
+    - name: Build the dotnet project
+      run: dotnet build "${{ inputs.dotnet_project }}" --configuration ${{ inputs.build_configuration }}
+
+    - name: Test the dotnet project
+      if: ${{ inputs.run_tests }}
+      run: dotnet test "${{ inputs.dotnet_project }}" --no-restore --no-build --configuration ${{ inputs.build_configuration }}
+
+    
