@@ -62,7 +62,7 @@ jobs:
 
     - name: Login to the Registry
       if: github.event_name != 'pull_request'
-      uses: azure/docker@v1
+      uses: azure/docker-login@v1
       with:
         login-server: ${{ inputs.registry_server }}
         username: ${{ inputs.registry_username }}
