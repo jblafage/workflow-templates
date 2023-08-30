@@ -42,6 +42,19 @@ jobs:
 
     steps:
 
+    - name: Define tag suffix
+      id: tag-suffix
+      run: |
+        IMG_TAG_SUFFIX=""
+        if [[ "${{ github.ref_name }}" == "${{ github.event.repository.default_branch }}" ]]; then
+          IMG_TAG_SUFFIX=""
+        else
+          IMG_TAG_SUFFIX="-unstable"
+        fi
+        echo "IMG_TAG_SUFFIX=${IMG_TAG_SUFFIX}" >> $GITHUB_ENV
+      shell: bash
+      
+
     - name: Docker meta
       id: meta
       uses: docker/metadata-action@v4
@@ -51,8 +64,7 @@ jobs:
 
         # generate Docker tags based on the following events/attributes
         tags: |
-          type=raw,value=latest-unstable,enable=!{{is_default_branch}}
-          type=raw,value=latest,enable={{is_default_branch}}
+          type=raw,value=latest,suffix=${{ env.IMG_TAG_SUFFIX }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
