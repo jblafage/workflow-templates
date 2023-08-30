@@ -42,6 +42,9 @@ jobs:
 
     steps:
 
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - name: Define tag suffix
       id: tag-suffix
       run: |
