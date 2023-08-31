@@ -33,21 +33,21 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Set up .NET
+    - name: 🎯 Set up .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ inputs.dotnet_version }}
 
-    - name: Restore the dotnet project
+    - name: 🗃️ Restore the dotnet project
       if: ${{ inputs.run_restore }}
       run: dotnet restore "${{ inputs.dotnet_project }}"
       shell: bash
 
-    - name: Build the dotnet project
+    - name: ⚙️ Build the dotnet project
       run: dotnet build "${{ inputs.dotnet_project }}" --configuration ${{ inputs.build_configuration }}
       shell: bash
 
-    - name: Test the dotnet project
+    - name: 🧪 Test the dotnet project
       if: ${{ inputs.run_tests }}
       run: dotnet test "${{ inputs.dotnet_project }}" --no-restore --no-build --configuration ${{ inputs.build_configuration }}
       shell: bash
