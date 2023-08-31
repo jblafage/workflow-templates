@@ -35,7 +35,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: jblafage/workflow-templates/actions/dotnet-restore-build-test@main
+    - uses: jblafage/workflow-templates/.github/actions/dotnet-restore-build-test@main
       with:
-        dotnet_project: 6.0.x
+        dotnet_version: 6.0.x
 ```
