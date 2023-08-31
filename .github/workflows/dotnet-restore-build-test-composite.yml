@@ -30,27 +30,16 @@ on:
         default: true
 
 jobs:
-  dotnet-restore-build-test:
+  dotnet-restore-build-test-composite:
     runs-on: ubuntu-latest
     steps:
     - name: 📥 Checkout
       uses: actions/checkout@v3
       
-    - name: 🎯 Set up .NET
-      uses: actions/setup-dotnet@v3
+    - uses: jblafage/workflow-templates/.github/actions/dotnet-restore-build-test@main
       with:
-        dotnet-version: ${{ inputs.dotnet_version }}
-
-    - name: 🗃️ Restore the dotnet project
-      if: ${{ inputs.run_restore }}
-      run: dotnet restore "${{ inputs.dotnet_project }}"
-      shell: bash
-
-    - name: ⚙️ Build the dotnet project
-      run: dotnet build "${{ inputs.dotnet_project }}" --configuration ${{ inputs.build_configuration }}
-      shell: bash
-
-    - name: 🧪 Test the dotnet project
-      if: ${{ inputs.run_tests }}
-      run: dotnet test "${{ inputs.dotnet_project }}" --no-restore --no-build --configuration ${{ inputs.build_configuration }}
-      shell: bash
+        dotnet_project: ${{ inputs.dotnet_project }}
+        dotnet_version: ${{ inputs.dotnet_version }}
+        build_configuration: ${{ inputs.build_configuration }}
+        run_restore: ${{ inputs.run_restore }}
+        run_tests: ${{ inputs.run_tests }}
