@@ -40,7 +40,7 @@ runs:
 
     - name: Restore the dotnet project
       if: ${{ inputs.run_restore }}
-      run: dotnet restore "${{ inuputs.dotnet_project }}"
+      run: dotnet restore "${{ inputs.dotnet_project }}"
 
     - name: Build the dotnet project
       run: dotnet build "${{ inputs.dotnet_project }}" --configuration ${{ inputs.build_configuration }}
