@@ -33,7 +33,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/dotnet-restore-build-test
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - uses: actions/dotnet-restore-build-test/action.yml
       with:
         dotnet_project: ${{ inputs.dotnet_project }}
         dotnet_version: ${{ inputs.dotnet_version }}
