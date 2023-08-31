@@ -67,7 +67,7 @@ jobs:
 
         # generate Docker tags based on the following events/attributes
         tags: |
-          type=raw,value=latest,suffix=${{ env.IMG_TAG_SUFFIX }}
+          type=raw,value=gh-test,suffix=${{ env.IMG_TAG_SUFFIX }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
