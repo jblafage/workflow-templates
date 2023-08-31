@@ -36,7 +36,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       
-    - uses: ./github/actions/dotnet-restore-build-test
+    - uses: ./.github/actions/dotnet-restore-build-test
       with:
         dotnet_project: ${{ inputs.dotnet_project }}
         dotnet_version: ${{ inputs.dotnet_version }}
