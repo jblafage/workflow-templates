@@ -1,0 +1,34 @@
+# action.yml
+name: 'dotnet-restore-build-test'
+description: 'Restore, build then test a dotnet project/solution.'
+inputs:
+  dotnet_project:
+    description: 'A reference to the dotnet projects to restore, build & test.'
+    required: true
+    type: string
+    default: '**/*.sln'
+
+  build_configuration:
+    description: 'The configuration to build and test the project/solution.'
+    required: true
+    type: string
+    default: Release
+
+  run_restore:
+    required: true
+    type: boolean
+    default: true
+
+  run_tests:
+    required: true
+    type: boolean
+    default: true
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.dotnet_project }}
+    - ${{ inputs.build_configuration }}
+    - ${{ inputs.run_restore }}
+    - ${{ inputs.run_tests }}
